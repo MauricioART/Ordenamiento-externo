@@ -2,6 +2,7 @@
 package Principal;
 import OrdenamientosExternos.*;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Scanner;
 /**
  * Esta clase contiene la interfaz de usuario para poder ordenar los datos enteros de un 
@@ -12,7 +13,7 @@ public class Principal {
     
    /**
     * 
-    * @param args 
+    * @param args
     */
    public static void main(String[] args){
 		
@@ -32,7 +33,10 @@ public class Principal {
                 switch(sc.nextInt()){
                     case 1:
                         System.out.print("┃Dirección del archivo a ordenar: ");
-                        Polifase pf = new Polifase(sc2.nextLine());
+                        String path = sc2.nextLine();
+                        System.out.print("┃Tamaño de bloque: ");
+                        int m = sc2.nextInt();
+                        Polifase pf = new Polifase(path, m);
                         pf.ordenar();
                         pf.mostrarDireccionArchivos();
                         break;
@@ -45,7 +49,8 @@ public class Principal {
                     case 3:
                         System.out.print("┃Dirección del archivo a ordenar: ");
                         RadixSortExterno rse = new RadixSortExterno(sc2.nextLine());
-                        rse.ordenar();
+                        System.out.print("┃Máximo número de digitos: ");
+                        rse.ordenar(sc2.nextInt());
                         rse.mostrarDireccionArchivos();
                         break;
                     case 4:
@@ -58,9 +63,11 @@ public class Principal {
             } catch (FileNotFoundException ex) {
                 System.out.println(">>>>>Archivo no encontrado");
                 
+            } catch (IOException e) {
+                System.out.println(">>d>>>Archivo no encontrado");
             }
-			
-	}while(continuar);
+
+    }while(continuar);
     }  
     
 }
