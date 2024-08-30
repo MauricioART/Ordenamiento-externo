@@ -3,6 +3,7 @@ package OrdenamientosExternos;
 
 import Herramientas.ManejadorDeArchivos;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Formatter;
@@ -28,67 +29,72 @@ public class MezclaEquilibrada {
      * @param filePath String de la dirección absoluta del archivo a ordenar
      * @throws FileNotFoundException 
      */
-    public MezclaEquilibrada(String filePath) throws FileNotFoundException{
+    public MezclaEquilibrada(String filePath) throws FileNotFoundException, IOException {
         this.manejadores = new ArrayList<>();
         this.manejadoresCopia = new ArrayList<>();
         this.manejadorArchivo = new ManejadorDeArchivos(filePath);
         for (int i = 0 ; i < 2 ; i++){
-            Formatter archivo = new Formatter("MezclaEquilibrada/Archivo" + this.nombresArchivosTemp[i]);
-            Formatter archivoCopia = new Formatter("MezclaEquilibrada/ArchivoAuxiliar" + this.nombresArchivosTemp[i]);
             this.manejadores.add(new ManejadorDeArchivos("MezclaEquilibrada/Archivo" + this.nombresArchivosTemp[i]));
             this.manejadoresCopia.add(new ManejadorDeArchivos("MezclaEquilibrada/ArchivoAuxiliar" + this.nombresArchivosTemp[i]));        
+        }
+        for (ManejadorDeArchivos manejador : this.manejadoresCopia){
+            manejador.limpiarArchivo();
         }
     }
     /**
      * Ordena los elementos del archivo en la dirección que establece el
      * String filePath, con el método de Mezcla equilibrada.
      */
-    public void ordenar(){
+    public void ordenar() {
         crearBloquesOrdenados();
-        
-        int par,par2,numeroBloques = 0;
-        par = 0;
-        par2 = 0;
-        while(numeroBloques != 1){
+
+        int par = 0, par2 = 0, numeroBloques = 0;
+
+        while (numeroBloques != 1) {
             numeroBloques = 0;
             this.manejadorArchivo.limpiarArchivo();
-            ArrayDeque<Integer> datosA,datosB;
-            while((datosA = this.manejadores.get(0).leerBloques()) != null && (datosB = this.manejadores.get(1).leerBloques()) != null ){
-                numeroBloques++;
-                while(!datosA.isEmpty() || !datosB.isEmpty()){
-                    if (!datosA.isEmpty() && !datosB.isEmpty())
-                        if(datosA.peek() < datosB.peek())
-                            this.manejadorArchivo.escribirDato(datosA.poll());
-                        else
+            ArrayDeque<Integer> datosA = this.manejadores.get(0).leerBloques(), datosB = this.manejadores.get(1).leerBloques();
+
+            while (!datosA.isEmpty() || !datosB.isEmpty()) {
+                    numeroBloques++;
+                    while (!datosA.isEmpty() || !datosB.isEmpty()) {
+                        if (!datosA.isEmpty() && !datosB.isEmpty())
+                            if (datosA.peek() < datosB.peek())
+                                this.manejadorArchivo.escribirDato(datosA.poll());
+                            else
+                                this.manejadorArchivo.escribirDato(datosB.poll());
+                        else if (datosA.isEmpty())
                             this.manejadorArchivo.escribirDato(datosB.poll());
-                    else
-                        if(datosA.isEmpty())
-                            this.manejadorArchivo.escribirDato(datosB.poll());
                         else
                             this.manejadorArchivo.escribirDato(datosA.poll());
+                    }
+                    datosA = this.manejadores.get(0).leerBloques();
+                    datosB = this.manejadores.get(1).leerBloques();
+                    if (!(datosA.isEmpty() && datosB.isEmpty()))
+                        this.manejadorArchivo.escribirSeparadorBloque();
                 }
-                this.manejadorArchivo.escribirSeparadorBloque();
-            }
-            resetearLectores();
-            limpiarArchivosTemp();
-            ArrayList<Integer> bloque;
-            par = 0;
-            par2 = 0;
-            while((bloque = this.manejadorArchivo.leerBloque()) != null){
-                this.manejadores.get((par++)%2).escribirBloques(bloque);
-                this.manejadoresCopia.get((par2++)%2).escribirBloques(bloque);
-            }
+
+                resetearLectores();
+                //TODO: Escribir en los archivos auxiliares antes de limpiarlos y tambien el del manejador
+                limpiarArchivosTemp();
+                ArrayList<Integer> bloque;
+                par = 0;
+                par2 = 0;
+                while ((bloque = this.manejadorArchivo.leerBloque()) != null) {
+                    this.manejadores.get((par++) % 2).escribirBloques(bloque);
+                    this.manejadoresCopia.get((par2++) % 2).escribirBloques(bloque);
+                }
         }
-        borrarArchivosTemp();
-    }
+            borrarArchivosTemp();
+        }
+
     
     /**
      * Lee los datos del archivo a ordenar creando los bloques ordenados y 
      * guardandolos en los archivos auxiliares.
      */
     public void crearBloquesOrdenados(){
-        int dato = 0;
-        int par = 0;
+        int dato = 0, par = 0;
         boolean esMayor;
         ArrayDeque<Integer> pila = new ArrayDeque<>();
         ArrayList<Integer> bloque = new ArrayList<>();
@@ -105,15 +111,16 @@ public class MezclaEquilibrada {
                     else
                         esMayor = false;
             }
-            for(Integer x : pila)
+            while(!pila.isEmpty()){
                 bloque.add(pila.poll());
+            }
             this.manejadores.get((par++)%2).escribirBloques(bloque);
             bloque.clear();
             pila.add(dato);
             
         }while(dato != -1);
     }
-    /**
+    /** 7,20,55,86,4,32,100,23,80,56,28,2,1,99,64,52,52,13,72,30
      * Regresa al lector de cada manejador de archivo a la posición 0 del
      * archivo.
      */
@@ -136,7 +143,7 @@ public class MezclaEquilibrada {
      */
     public void borrarArchivosTemp(){
         for(ManejadorDeArchivos x : this.manejadores){
-            x.borrarArchivo();
+            x.limpiarArchivo();
         }
     }
     /**

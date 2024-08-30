@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  * @author Equipo 3
  */
 
-public class ManejadorDeArchivos{
+public class ManejadorDeArchivos implements AutoCloseable{
 
     private final static int SEPARADOR_BLOQUES = 39;
     private final static int SEPARADOR_DATOS = 44;
@@ -26,12 +26,15 @@ public class ManejadorDeArchivos{
      * @param filePath 
      * @throws java.io.FileNotFoundException 
      */
-    public ManejadorDeArchivos(String filePath) throws FileNotFoundException{
+    public ManejadorDeArchivos(String filePath) throws FileNotFoundException, IOException{
 
         this.archivo = new File(filePath);
+        if (!this.archivo.exists()) {
+            this.archivo.createNewFile();
+        }
+
         this.lector = new FileInputStream(this.archivo);
         this.escritor = new FileOutputStream(this.archivo,true);
-
     }
     /**
      * Regresa la dirección absoluta del archivo con el que se trabaja. 
@@ -60,21 +63,21 @@ public class ManejadorDeArchivos{
     public int leerDato(){
         try {
             int n = 0;
-            int x,i,dato;
+            int x,i = 1, dato = 0;
             Stack<Integer> pila = new Stack<>();
             while((x = this.lector.read()) != SEPARADOR_DATOS && x != -1){
-                if (x != -1)
-                    pila.push(new Integer(Character.getNumericValue(x)));
-            }   i = 1;
-            dato = 0;
-            while(!pila.empty()){
-                dato = dato + i * pila.pop().intValue();
-                i *= 10;
-            }   
-            if(x != -1)
-                return dato;
-            else 
+                pila.push(Character.getNumericValue(x));
+            }
+            if (pila.empty())
                 return -1;
+            else{
+                while(!pila.empty()){
+                    dato = dato + i * pila.pop();
+                    i *= 10;
+                }
+                return dato;
+            }
+
         } catch (IOException ex) {
            return -1;
         }
@@ -94,16 +97,16 @@ public class ManejadorDeArchivos{
             do{
 		while((x = this.lector.read()) != SEPARADOR_DATOS && x != -1){
                     if (x != -1)
-			pila.push(new Integer(Character.getNumericValue(x)));
+			pila.push(Character.getNumericValue(x));
 		}
 		i = 1;
 		dato = 0;
 		while(!pila.empty()){
-                    dato = dato + i * pila.pop().intValue();
+                    dato = dato + i * pila.pop();
                     i *= 10;
 		}
                 if (x != -1)
-                    nDatos.add(new Integer(dato));
+                    nDatos.add(dato);
                     n++;
 		}while( n < m && x != -1);
                     if (nDatos.isEmpty())
@@ -122,65 +125,60 @@ public class ManejadorDeArchivos{
      * @return un ArrayList con los enteros decodificados
      */
     public ArrayList<Integer> leerBloque(){
-	try{	
-            int x,i,dato;
+	    try{
+            int x, i, dato;
             ArrayList<Integer> nDatos = new ArrayList<>();
             Stack<Integer> pila = new Stack<>();
             do{
-		while((x = this.lector.read()) != SEPARADOR_DATOS && x != -1 && x != SEPARADOR_BLOQUES){
+		        while((x = this.lector.read()) != SEPARADOR_DATOS && x != -1 && x != SEPARADOR_BLOQUES){
                     if (x != -1)
-			pila.push(new Integer(Character.getNumericValue(x)));
-		}
-		i = 1;
-		dato = 0;
-		while(!pila.empty()){
-                    dato = dato + i * pila.pop().intValue();
+			            pila.push(Character.getNumericValue(x));
+		        }
+		        i = 1;
+		        dato = 0;
+		        while(!pila.empty()){
+                    dato = dato + i * pila.pop();
                     i *= 10;
-		}
+		        }
                 if (x != -1 && x != SEPARADOR_BLOQUES)
-                    nDatos.add(new Integer(dato));
-		}while( x != SEPARADOR_BLOQUES && x != -1);
-                    if (nDatos.isEmpty())
-                        return null;
-                    else
-                        return nDatos;
-		}
-	catch(IOException e){
+                    nDatos.add(dato);
+		    }while( x != SEPARADOR_BLOQUES && x != -1);
+            if (nDatos.isEmpty())
+                return null;
+            else
+                return nDatos;
+
+        } catch(IOException e){
             System.out.println("***Archivo no encontrado***");
             return null;
-	}	
+	    }
     }
     /**
      * 
      */
      public ArrayDeque<Integer> leerBloques(){
-	try{	
+	    try{
             int x,i,dato;
             ArrayDeque<Integer> nDatos = new ArrayDeque<>();
             Stack<Integer> pila = new Stack<>();
             do{
-		while((x = this.lector.read()) != SEPARADOR_DATOS && x != -1 && x != SEPARADOR_BLOQUES){
-                    if (x != -1)
-			pila.push(new Integer(Character.getNumericValue(x)));
-		}
-		i = 1;
-		dato = 0;
-		while(!pila.empty()){
-                    dato = dato + i * pila.pop().intValue();
+		        while((x = this.lector.read()) != SEPARADOR_DATOS && x != -1 && x != SEPARADOR_BLOQUES){
+                        pila.push(Character.getNumericValue(x));
+		        }
+		        i = 1;
+		        dato = 0;
+		        while(!pila.empty()){
+                    dato = dato + i * pila.pop();
                     i *= 10;
-		}
+		        }
                 if (x != -1 && x != SEPARADOR_BLOQUES)
-                    nDatos.add(new Integer(dato));
-		}while( x != SEPARADOR_BLOQUES && x != -1);
-                    if (nDatos.isEmpty())
-                        return null;
-                    else
-                        return nDatos;
-		}
-	catch(IOException e){
+                    nDatos.add(dato);
+		    }while( x != SEPARADOR_BLOQUES && x != -1);
+            return nDatos;
+        }catch(IOException e){
             System.out.println("***Archivo no encontrado***");
             return null;
-	}	
+    	}
     }
 
     /**
@@ -244,12 +242,11 @@ public class ManejadorDeArchivos{
      */
     public void escribirBloques(ArrayList<Integer> datos){
 	try{
-            int size = datos.size();
             String datoStr = "";
-            for (int i = 0 ; i < size ;i++){
-		datoStr = datos.get(i).toString();
-		char[] datoChar = datoStr.toCharArray();
-		for (char x : datoChar){
+            for (int i = 0 ; i < datos.size() ;i++){
+		        datoStr = datos.get(i).toString();
+
+		        for (char x : datoStr.toCharArray()){
                     this.escritor.write(Integer.parseInt(String.valueOf(x))+48);
                 }
                 if (!datos.isEmpty())
@@ -268,12 +265,9 @@ public class ManejadorDeArchivos{
      */
     public void saltarLinea(){
         try {
-            this.escritor.write(9);
-            this.escritor.write(9);
-            this.escritor.write(9);
-            this.escritor.write(9);
-            this.escritor.write(9);
-            this.escritor.write(9);
+            this.escritor.write(11);
+            this.escritor.write(11);
+            this.escritor.write(11);
             /*BufferedReader br = new BufferedReader(new FileReader(this.archivo));
             ArrayList<String> bloques = new ArrayList<>();
             String buffer;
@@ -318,7 +312,7 @@ public class ManejadorDeArchivos{
             ArrayList<String> bloques = new ArrayList<>();
             String buffer;
             while((buffer = br.readLine()) != null){
-		bloques.add(buffer);
+		        bloques.add(buffer);
             }
             br.close();
             buffer = "";
@@ -355,10 +349,22 @@ public class ManejadorDeArchivos{
     /**
      * Elimina el archivo o la carpeta denotada por este abstact pathname.
      */
-    public void borrarArchivo(){
-        this.archivo.delete();
+    public boolean borrarArchivo(){
+        return this.archivo.delete();
     }
 
-
+    @Override
+    public void close() {
+        try {
+            if (lector != null) {
+                lector.close();
+            }
+            if (escritor != null) {
+                escritor.close();
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(ManejadorDeArchivos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
 	
 }
