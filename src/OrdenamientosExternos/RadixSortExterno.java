@@ -2,8 +2,8 @@
 package OrdenamientosExternos;
 import Herramientas.ManejadorDeArchivos;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Formatter;
 /**
  * Esta clase está destinada al ordenamiento de los elementos, enteros, de 
  * un archivo de manera ascendente con el método homonimo de la clase.
@@ -24,13 +24,11 @@ public class RadixSortExterno {
      * @param filePath String de la dirección absoluta del archivo a ordenar
      * @throws java.io.FileNotFoundException
      */
-    public RadixSortExterno(String filePath) throws FileNotFoundException{
+    public RadixSortExterno(String filePath) throws FileNotFoundException, IOException {
         this.manejadores = new ArrayList<>();
         this.manejadoresCopia = new ArrayList<>();
         this.manejadorArchivo = new ManejadorDeArchivos(filePath);
         for (int i = 0 ; i < 10 ; i++){
-            Formatter archivo = new Formatter("Radix/Archivo" + this.nombresArchivosTemp[i]);
-            Formatter archivoCopia = new Formatter("Radix/ArchivoAuxiliar" + this.nombresArchivosTemp[i]);
             this.manejadores.add(new ManejadorDeArchivos("Radix/Archivo" + this.nombresArchivosTemp[i]));
             this.manejadoresCopia.add(new ManejadorDeArchivos("Radix/ArchivoAuxiliar" + this.nombresArchivosTemp[i]));    
         }
@@ -40,14 +38,15 @@ public class RadixSortExterno {
      * Ordena los elementos del archivo en la dirección que establece el String filePath,
      * con el método de Radix Sort Externo.
      */
-    public void ordenar(){
+    public void ordenar(int maxDigits){
+        int upperLimit = (int) Math.pow(10, maxDigits + 1);
         ArrayList<Integer> datos;
-        for (int i = 10 ; i<10000 ; i*=10){
+        for (int i = 10 ; i< upperLimit ; i*=10){
             while((datos = this.manejadorArchivo.leerDatos(TAMANIO_BLOQUE)) != null){
                 for(Integer x : datos){
                     int digito = x % i;
                     digito = 10*digito/i;
-                    this.manejadores.get(digito).escribirDato(x.intValue());
+                    this.manejadores.get(digito).escribirDato(x);
                 }
             }
             this.manejadorArchivo.resetLector();

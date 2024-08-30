@@ -89,35 +89,38 @@ public class ManejadorDeArchivos implements AutoCloseable{
      * @return los enteros interpretados contenidos en un ArrayList<>
      */
     public ArrayList<Integer> leerDatos(int m){
-	try{	
+	    try{
+            boolean hasMoreData;
             int n = 0;
             int x,i,dato;
             ArrayList<Integer> nDatos = new ArrayList<>();
             Stack<Integer> pila = new Stack<>();
             do{
-		while((x = this.lector.read()) != SEPARADOR_DATOS && x != -1){
-                    if (x != -1)
-			pila.push(Character.getNumericValue(x));
-		}
-		i = 1;
-		dato = 0;
-		while(!pila.empty()){
+                hasMoreData = false;
+		        while((x = this.lector.read()) != SEPARADOR_DATOS && x != -1){
+			            pila.push(Character.getNumericValue(x));
+                        hasMoreData = true;
+		        }
+		        i = 1;
+		        dato = 0;
+		        while(!pila.empty()){
                     dato = dato + i * pila.pop();
                     i *= 10;
-		}
-                if (x != -1)
+		        }
+                if (hasMoreData)
                     nDatos.add(dato);
-                    n++;
-		}while( n < m && x != -1);
-                    if (nDatos.isEmpty())
-                        return null;
-                    else
-                        return nDatos;
-		}
-	catch(Exception e){
+                n++;
+		    }while( n < m && x != -1);
+
+            if (nDatos.isEmpty())
+                return null;
+            else
+                return nDatos;
+
+        } catch(Exception e){
             System.out.println("***Archivo no encontrado***");
             return null;
-	}	
+	    }
     }
     /**
      * Lee los raw bytes desde la posición actual hasta el carácter SEPARADOR_BLOQUES,
@@ -265,8 +268,6 @@ public class ManejadorDeArchivos implements AutoCloseable{
      */
     public void saltarLinea(){
         try {
-            this.escritor.write(11);
-            this.escritor.write(11);
             this.escritor.write(11);
             /*BufferedReader br = new BufferedReader(new FileReader(this.archivo));
             ArrayList<String> bloques = new ArrayList<>();
