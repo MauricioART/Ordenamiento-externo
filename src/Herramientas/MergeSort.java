@@ -24,11 +24,10 @@ public class MergeSort {
     * Imprime en pantalla el arreglo de entrada.
     * @param arr Arreglo de enteros a imprimir
     */
-    void printArray(int arr[]) 
+    void printArray(int[] arr)
     { 
-        int n = arr.length; 
-        for (int i=0; i<n; ++i) 
-            System.out.print(arr[i] + " "); 
+        int n = arr.length;
+        for (int j : arr) System.out.print(j + " ");
         System.out.println(); 
     } 
     
@@ -39,16 +38,16 @@ public class MergeSort {
      * @param m indice del elemento medio de arr
      * @param r indice del ultimo elemento de arr
      */
-    void merge(int arr[], int l, int m, int r) 
+    void merge(int[] arr, int l, int m, int r)
     { 
         int n1 = m - l + 1; 
         int n2 = r - m; 
   
-        int L[] = new int [n1]; 
-        int R[] = new int [n2]; 
-  
-        for (int i=0; i<n1; ++i) 
-            L[i] = arr[l + i]; 
+        int[] L= new int [n1];
+        int[] R = new int [n2];
+
+        for (int i=0; i<n1; ++i)
+            L[i] = arr[l + i];
         for (int j=0; j<n2; ++j) 
             R[j] = arr[m + 1+ j]; 
   

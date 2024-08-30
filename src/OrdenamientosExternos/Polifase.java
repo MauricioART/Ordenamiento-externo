@@ -2,9 +2,9 @@
 package OrdenamientosExternos;
 import Herramientas.*;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Formatter;
 
 /**
  * Esta clase está destinada al ordenamiento de los elementos, enteros, de 
@@ -13,7 +13,7 @@ import java.util.Formatter;
  */
 public class Polifase {
     
-    private final int TAMANIO_BLOQUE = 5;
+    private final int TAMANIO_BLOQUE;
     private final String[] nombresArchivosTemp = {"Uno.txt","Dos.txt"};
     private ArrayList<ManejadorDeArchivos> manejadores;
     private ManejadorDeArchivos manejadorArchivo; 
@@ -26,13 +26,12 @@ public class Polifase {
      * @param filePath String de la dirección absoluta del archivo a ordenar
      * @throws java.io.FileNotFoundException
      */
-    public Polifase(String filePath) throws FileNotFoundException{
+    public Polifase(String filePath, int m) throws FileNotFoundException, IOException {
+        this.TAMANIO_BLOQUE = m;
         this.manejadores = new ArrayList<>();
         this.manejadoresCopia = new ArrayList<>();
         this.manejadorArchivo = new ManejadorDeArchivos(filePath);
         for (int i = 0 ; i < 2 ; i++){
-            Formatter archivo = new Formatter("Polifase/Archivo" + this.nombresArchivosTemp[i]);
-            Formatter archivoCopia = new Formatter("Polifase/ArchivoAuxiliar" + this.nombresArchivosTemp[i]);
             this.manejadores.add(new ManejadorDeArchivos("Polifase/Archivo" + this.nombresArchivosTemp[i]));
             this.manejadoresCopia.add(new ManejadorDeArchivos("Polifase/ArchivoAuxiliar" + this.nombresArchivosTemp[i]));
                 
@@ -45,8 +44,7 @@ public class Polifase {
     public void ordenar(){
         
         ArrayList<Integer> datos;
-        int par = 0;
-        int par2 = 0;
+        int par = 0, par2 = 0;  //Manejo de intercalación de los archivos
         while((datos = this.manejadorArchivo.leerDatos(TAMANIO_BLOQUE)) != null){
             int[] datosInt = new int[datos.size()];
             int i = 0;
@@ -62,31 +60,36 @@ public class Polifase {
         while(numeroBloques != 1){
             numeroBloques = 0;
             this.manejadorArchivo.limpiarArchivo();
-            ArrayDeque<Integer> datosA,datosB;
-            while((datosA = this.manejadores.get(0).leerBloques()) != null && (datosB = this.manejadores.get(1).leerBloques()) != null ){
+            ArrayDeque<Integer> datosA = this.manejadores.get(0).leerBloques(), datosB = this.manejadores.get(1).leerBloques();
+
+            while (!datosA.isEmpty() || !datosB.isEmpty()) {
                 numeroBloques++;
-                while(!datosA.isEmpty() || !datosB.isEmpty()){
+                while (!datosA.isEmpty() || !datosB.isEmpty()) {
                     if (!datosA.isEmpty() && !datosB.isEmpty())
-                        if(datosA.peek() < datosB.peek())
+                        if (datosA.peek() < datosB.peek())
                             this.manejadorArchivo.escribirDato(datosA.poll());
                         else
                             this.manejadorArchivo.escribirDato(datosB.poll());
+                    else if (datosA.isEmpty())
+                        this.manejadorArchivo.escribirDato(datosB.poll());
                     else
-                        if(datosA.isEmpty())
-                            this.manejadorArchivo.escribirDato(datosB.poll());
-                        else
-                            this.manejadorArchivo.escribirDato(datosA.poll());
+                        this.manejadorArchivo.escribirDato(datosA.poll());
                 }
-                this.manejadorArchivo.escribirSeparadorBloque();
+                datosA = this.manejadores.get(0).leerBloques();
+                datosB = this.manejadores.get(1).leerBloques();
+                if (!(datosA.isEmpty() && datosB.isEmpty()))
+                    this.manejadorArchivo.escribirSeparadorBloque();
             }
+
             resetearLectores();
+            //TODO: Escribir en los archivos auxiliares antes de limpiarlos y tambien el del manejador
             limpiarArchivosTemp();
             ArrayList<Integer> bloque;
             par = 0;
             par2 = 0;
-            while((bloque = this.manejadorArchivo.leerBloque()) != null){
-                this.manejadores.get((par++)%2).escribirBloques(bloque);
-                this.manejadoresCopia.get((par2++)%2).escribirBloques(bloque);
+            while ((bloque = this.manejadorArchivo.leerBloque()) != null) {
+                this.manejadores.get((par++) % 2).escribirBloques(bloque);
+                this.manejadoresCopia.get((par2++) % 2).escribirBloques(bloque);
             }
         }
         borrarArchivosTemp();
@@ -115,7 +118,7 @@ public class Polifase {
      */
     public void borrarArchivosTemp(){
         for(ManejadorDeArchivos x : this.manejadores){
-            x.borrarArchivo();
+            x.limpiarArchivo();
         }
     }
     /**
