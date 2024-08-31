@@ -1,15 +1,17 @@
 
-package Herramientas;
+package com.arturoar.Herramientas;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//import javafx.stage.FileChooser;
+
 /**
  * Esta clase contiene todos los métodos usados para trabajar con los archivos, cuenta
  * con varios métodos de escritura y lectura. Mayormente trabaja con las clases  
  * FileInputStream/FileOutputStream por lo que se leen y escriben "raw bytes".
- * @author Equipo 3
+ * @author ArturoAR
  */
 
 public class ManejadorDeArchivos implements AutoCloseable{
@@ -36,6 +38,17 @@ public class ManejadorDeArchivos implements AutoCloseable{
         this.lector = new FileInputStream(this.archivo);
         this.escritor = new FileOutputStream(this.archivo,true);
     }
+/*
+    public ManejadorDeArchivos(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt")
+        );
+        this.archivo = fileChooser.showOpenDialog();
+        this.lector = new FileInputStream(this.archivo);
+        this.escritor = new FileOutputStream(this.archivo,true);
+    }*/
+
     /**
      * Regresa la dirección absoluta del archivo con el que se trabaja. 
      * @return 

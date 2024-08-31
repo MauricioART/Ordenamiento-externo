@@ -1,13 +1,13 @@
 
-package Principal;
-import OrdenamientosExternos.*;
+package com.arturoar.Principal;
+import com.arturoar.OrdenamientosExternos.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 /**
  * Esta clase contiene la interfaz de usuario para poder ordenar los datos enteros de un 
  * archivo con tres diferentes métodos de ordenamiento externo.
- * @author Equipo 3
+ * @author ArturoAR
  */
 public class Principal {
     
@@ -19,6 +19,7 @@ public class Principal {
 		
 	Scanner sc = new Scanner(System.in);
 	Scanner sc2 = new Scanner(System.in);
+
 	boolean continuar = true;
 	do{
             try {
@@ -31,6 +32,7 @@ public class Principal {
                 System.out.print("┃◆Opción: ");
                 
                 switch(sc.nextInt()){
+
                     case 1:
                         System.out.print("┃Dirección del archivo a ordenar: ");
                         String path = sc2.nextLine();
@@ -68,7 +70,7 @@ public class Principal {
             }
 
     }while(continuar);
-    }  
+    }
     
 }
    

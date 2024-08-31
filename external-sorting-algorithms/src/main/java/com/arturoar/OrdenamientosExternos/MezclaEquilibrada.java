@@ -1,7 +1,7 @@
 
-package OrdenamientosExternos;
+package com.arturoar.OrdenamientosExternos;
 
-import Herramientas.ManejadorDeArchivos;
+import com.arturoar.Herramientas.ManejadorDeArchivos;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -11,7 +11,7 @@ import java.util.Formatter;
 /**
  * Esta clase está destinada al ordenamiento de los elementos, enteros, de 
  * un archivo de manera ascendente con el método homonimo de la clase. 
- * @author Equipo 3
+ * @author ArturoAR
  */
 public class MezclaEquilibrada {
     

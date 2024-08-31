@@ -1,6 +1,6 @@
 
-package OrdenamientosExternos;
-import Herramientas.*;
+package com.arturoar.OrdenamientosExternos;
+import com.arturoar.Herramientas.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -9,7 +9,7 @@ import java.util.ArrayList;
 /**
  * Esta clase está destinada al ordenamiento de los elementos, enteros, de 
  * un archivo de manera ascendente con el método homonimo de la clase.
- * @author Equipo 3
+ * @author ArturoAR
  */
 public class Polifase {
     
