@@ -18,7 +18,6 @@ public class Principal {
    public static void main(String[] args){
 		
 	Scanner sc = new Scanner(System.in);
-	Scanner sc2 = new Scanner(System.in);
 
 	boolean continuar = true;
 	do{
@@ -34,25 +33,30 @@ public class Principal {
                 switch(sc.nextInt()){
 
                     case 1:
+                        sc.nextLine();
                         System.out.print("┃Dirección del archivo a ordenar: ");
-                        String path = sc2.nextLine();
+                        String path = sc.nextLine();
                         System.out.print("┃Tamaño de bloque: ");
-                        int m = sc2.nextInt();
+                        int m = sc.nextInt();
                         Polifase pf = new Polifase(path, m);
                         pf.ordenar();
                         pf.mostrarDireccionArchivos();
                         break;
                     case 2:
+                        sc.nextLine();
                         System.out.print("┃Dirección del archivo a ordenar: ");
-                        MezclaEquilibrada me = new MezclaEquilibrada(sc2.nextLine());
+                        String filePath = sc.nextLine();
+                        System.out.println(filePath);
+                        MezclaEquilibrada me = new MezclaEquilibrada(filePath);
                         me.ordenar();
                         me.mostrarDireccionArchivos();
                         break;
                     case 3:
+                        sc.nextLine();
                         System.out.print("┃Dirección del archivo a ordenar: ");
-                        RadixSortExterno rse = new RadixSortExterno(sc2.nextLine());
+                        RadixSortExterno rse = new RadixSortExterno(sc.nextLine());
                         System.out.print("┃Máximo número de digitos: ");
-                        rse.ordenar(sc2.nextInt());
+                        rse.ordenar(sc.nextInt());
                         rse.mostrarDireccionArchivos();
                         break;
                     case 4:
