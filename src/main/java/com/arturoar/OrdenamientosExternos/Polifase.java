@@ -1,6 +1,8 @@
 
 package com.arturoar.OrdenamientosExternos;
 import com.arturoar.Herramientas.*;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayDeque;
@@ -23,14 +25,14 @@ public class Polifase {
      * Construye una instancia de la clase Polifase, inicializando
      * el atributo manejadorArchivo con filePath, creando dos archivos auxiliares
      * e inicializando manejadores con las direcciones de éstos.
-     * @param filePath String de la dirección absoluta del archivo a ordenar
+     * @param file String de la dirección absoluta del archivo a ordenar
      * @throws java.io.FileNotFoundException
      */
-    public Polifase(String filePath, int m) throws FileNotFoundException, IOException {
+    public Polifase(File file, int m) throws FileNotFoundException, IOException {
         this.TAMANIO_BLOQUE = m;
         this.manejadores = new ArrayList<>();
         this.manejadoresCopia = new ArrayList<>();
-        this.manejadorArchivo = new ManejadorDeArchivos(filePath);
+        this.manejadorArchivo = new ManejadorDeArchivos(file);
         for (int i = 0 ; i < 2 ; i++){
             this.manejadores.add(new ManejadorDeArchivos("Polifase/Archivo" + this.nombresArchivosTemp[i]));
             this.manejadoresCopia.add(new ManejadorDeArchivos("Polifase/ArchivoAuxiliar" + this.nombresArchivosTemp[i]));

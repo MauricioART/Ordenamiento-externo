@@ -21,7 +21,14 @@ public class ManejadorDeArchivos implements AutoCloseable{
     private File archivo;
     private FileInputStream lector;
     private FileOutputStream escritor;
-    
+
+
+    public ManejadorDeArchivos(File file) throws FileNotFoundException {
+        this.archivo = file;
+        this.lector = new FileInputStream(this.archivo);
+        this.escritor = new FileOutputStream(this.archivo,true);
+    }
+
     /**
      * Construye una instancia de la clase File con la direccion filePath
      * y con ella otras instancias de las clases FileInputStream/FileOutputStream

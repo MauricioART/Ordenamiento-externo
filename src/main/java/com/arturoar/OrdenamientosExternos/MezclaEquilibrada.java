@@ -6,7 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Formatter;
+import java.io.File;
 
 /**
  * Esta clase está destinada al ordenamiento de los elementos, enteros, de 
@@ -26,13 +26,13 @@ public class MezclaEquilibrada {
      * Construye una instancia de la clase MezclaEquilibrada, inicializando
      * el atributo manejadorArchivo con filePath, creando dos archivos auxiliares
      * e inicializando manejadores con las direcciones de éstos.
-     * @param filePath String de la dirección absoluta del archivo a ordenar
+     * @param file String de la dirección absoluta del archivo a ordenar
      * @throws FileNotFoundException 
      */
-    public MezclaEquilibrada(String filePath) throws FileNotFoundException, IOException {
+    public MezclaEquilibrada(File file) throws FileNotFoundException, IOException {
         this.manejadores = new ArrayList<>();
         this.manejadoresCopia = new ArrayList<>();
-        this.manejadorArchivo = new ManejadorDeArchivos(filePath);
+        this.manejadorArchivo = new ManejadorDeArchivos(file);
         for (int i = 0 ; i < 2 ; i++){
             this.manejadores.add(new ManejadorDeArchivos("MezclaEquilibrada/Archivo" + this.nombresArchivosTemp[i]));
             this.manejadoresCopia.add(new ManejadorDeArchivos("MezclaEquilibrada/ArchivoAuxiliar" + this.nombresArchivosTemp[i]));        

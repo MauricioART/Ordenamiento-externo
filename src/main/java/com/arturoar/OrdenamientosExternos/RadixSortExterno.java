@@ -4,6 +4,7 @@ import com.arturoar.Herramientas.ManejadorDeArchivos;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.io.File;
 /**
  * Esta clase está destinada al ordenamiento de los elementos, enteros, de 
  * un archivo de manera ascendente con el método homonimo de la clase.
@@ -21,13 +22,13 @@ public class RadixSortExterno {
      * Construye una instancia de la clase RadixSortExterno, inicializando
      * el atributo manejadorArchivo con filePath, creando diez archivos auxiliares
      * e inicializando manejadores con las direcciones de éstos.
-     * @param filePath String de la dirección absoluta del archivo a ordenar
+     * @param file String de la dirección absoluta del archivo a ordenar
      * @throws java.io.FileNotFoundException
      */
-    public RadixSortExterno(String filePath) throws FileNotFoundException, IOException {
+    public RadixSortExterno(File file) throws FileNotFoundException, IOException {
         this.manejadores = new ArrayList<>();
         this.manejadoresCopia = new ArrayList<>();
-        this.manejadorArchivo = new ManejadorDeArchivos(filePath);
+        this.manejadorArchivo = new ManejadorDeArchivos(file);
         for (int i = 0 ; i < 10 ; i++){
             this.manejadores.add(new ManejadorDeArchivos("Radix/Archivo" + this.nombresArchivosTemp[i]));
             this.manejadoresCopia.add(new ManejadorDeArchivos("Radix/ArchivoAuxiliar" + this.nombresArchivosTemp[i]));    
