@@ -1,21 +1,25 @@
+package com.arturoar.main;
 
-package com.arturoar.Principal;
-import com.arturoar.OrdenamientosExternos.*;
+import com.arturoar.externalsortingalgorithms.*;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 import java.io.File;
 
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
+
+/*
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
+import javafx.stage.Stage;*/
 /**
  * Esta clase contiene la interfaz de usuario para poder ordenar los datos enteros de un 
  * archivo con tres diferentes métodos de ordenamiento externo.
  * @author ArturoAR
  */
-public class Principal extends Application {
+public class Principal  {
 
     private static File selectedFile;
    /**
@@ -107,22 +111,36 @@ public class Principal extends Application {
 
     // Método para lanzar JavaFX y abrir el FileChooser
     private static void launchFileChooser() {
-        Platform.startup(() -> {
+        JFileChooser fileChooser = new JFileChooser();
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
+        fileChooser.setFileFilter(filter);
+
+        int result = fileChooser.showSaveDialog(null);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            selectedFile = fileChooser.getSelectedFile();
+            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+        } else {
+            System.out.println("No file selected.");
+        }
+        /*Platform.startup(() -> {
             try {
                 Stage stage = new Stage();
                 FileChooser fileChooser = new FileChooser();
                 fileChooser.setTitle("Selecciona el archivo a ordenar");
                 selectedFile = fileChooser.showOpenDialog(stage);
-            } finally {
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            finally {
                 Platform.exit(); // Cerrar la plataforma de JavaFX una vez que se ha seleccionado el archivo
             }
-        });
+        });*/
     }
-
+/*
     @Override
     public void start(Stage primaryStage) {
         // No se utiliza el primaryStage en este caso.
-    }
+    }*/
     
 }
    

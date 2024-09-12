@@ -1,6 +1,6 @@
 
-package com.arturoar.OrdenamientosExternos;
-import com.arturoar.Herramientas.ManejadorDeArchivos;
+package com.arturoar.externalsortingalgorithms;
+import com.arturoar.tools.ManejadorDeArchivos;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;

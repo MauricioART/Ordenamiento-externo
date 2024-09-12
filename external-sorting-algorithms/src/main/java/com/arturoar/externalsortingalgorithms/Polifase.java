@@ -1,12 +1,12 @@
 
-package com.arturoar.OrdenamientosExternos;
-import com.arturoar.Herramientas.*;
+package com.arturoar.externalsortingalgorithms;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import com.arturoar.tools.*;
 
 /**
  * Esta clase está destinada al ordenamiento de los elementos, enteros, de 
