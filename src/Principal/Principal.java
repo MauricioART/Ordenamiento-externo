@@ -7,7 +7,7 @@ import java.util.Scanner;
 /**
  * Esta clase contiene la interfaz de usuario para poder ordenar los datos enteros de un 
  * archivo con tres diferentes métodos de ordenamiento externo.
- * @author Equipo 3
+ * @author Aguilera Roa Mauricio Arturo
  */
 public class Principal {
     
