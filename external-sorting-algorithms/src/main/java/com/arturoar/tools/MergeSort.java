@@ -1,5 +1,5 @@
 
-package Herramientas;
+package com.arturoar.tools;
 import java.util.ArrayList;
 /**
  * Esta clase ordena un arreglo de enteros con el método Merge Sort 

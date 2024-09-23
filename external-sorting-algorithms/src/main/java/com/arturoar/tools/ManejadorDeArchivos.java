@@ -1,15 +1,17 @@
 
-package Herramientas;
+package com.arturoar.tools;
 import java.io.*;
 import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//import javafx.stage.FileChooser;
+
 /**
  * Esta clase contiene todos los métodos usados para trabajar con los archivos, cuenta
  * con varios métodos de escritura y lectura. Mayormente trabaja con las clases  
  * FileInputStream/FileOutputStream por lo que se leen y escriben "raw bytes".
- * @author Equipo 3
+ * @author ArturoAR
  */
 
 public class ManejadorDeArchivos implements AutoCloseable{
@@ -19,7 +21,14 @@ public class ManejadorDeArchivos implements AutoCloseable{
     private File archivo;
     private FileInputStream lector;
     private FileOutputStream escritor;
-    
+
+
+    public ManejadorDeArchivos(File file) throws FileNotFoundException {
+        this.archivo = file;
+        this.lector = new FileInputStream(this.archivo);
+        this.escritor = new FileOutputStream(this.archivo,true);
+    }
+
     /**
      * Construye una instancia de la clase File con la direccion filePath
      * y con ella otras instancias de las clases FileInputStream/FileOutputStream
@@ -29,13 +38,33 @@ public class ManejadorDeArchivos implements AutoCloseable{
     public ManejadorDeArchivos(String filePath) throws FileNotFoundException, IOException{
 
         this.archivo = new File(filePath);
-        if (!this.archivo.exists()) {
-            this.archivo.createNewFile();
+
+        // Create directories if they don't exist
+        if (this.archivo.getParentFile().mkdirs()) {
+            System.out.println("Directories created.");
+        }
+
+        // Create the file
+        if (this.archivo.createNewFile()) {
+            System.out.println("File created.");
+        } else {
+            System.out.println("File already exists.");
         }
 
         this.lector = new FileInputStream(this.archivo);
         this.escritor = new FileOutputStream(this.archivo,true);
     }
+/*
+    public ManejadorDeArchivos(){
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt")
+        );
+        this.archivo = fileChooser.showOpenDialog();
+        this.lector = new FileInputStream(this.archivo);
+        this.escritor = new FileOutputStream(this.archivo,true);
+    }*/
+
     /**
      * Regresa la dirección absoluta del archivo con el que se trabaja. 
      * @return 
