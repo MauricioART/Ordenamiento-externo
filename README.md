@@ -36,7 +36,7 @@ The project is designed to handle large files that cannot be sorted entirely in 
 ## Usage
 
 After compiling the project, run the main class:
- ´´´bash
+    ```bash
  java -cp bin com.arturoar.tools.Principal
 
 Upon running, you'll be presented with a menu in the console with the following options:
@@ -70,5 +70,5 @@ If you would like to contribute to this project, feel free to fork the repositor
 
 ## License
 This project is licensed under the MIT License. See the LICENSE file for details.
-    ´´´bash
+    ```bash
     You can copy this and save it as `README.md` in your repository! Let me know if you'd like any adjustments.
