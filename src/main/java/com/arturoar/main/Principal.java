@@ -10,155 +10,128 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-/*
-import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.stage.FileChooser;
-import javafx.stage.Stage;*/
+
 /**
- * Esta clase contiene la interfaz de usuario para poder ordenar los datos enteros de un 
- * archivo con tres diferentes métodos de ordenamiento externo.
+ * This class provides the user interface to sort integer data from a file using 
+ * three different external sorting algorithms.
  * @author ArturoAR
  */
+
 public class Principal  {
 
     private static File selectedFile;
-   /**
-    * 
-    * @param args
-    */
-   public static void main(String[] args){
-		
-	Scanner sc = new Scanner(System.in);
 
-	boolean continuar = true;
-	do{
-            try {
-                System.out.println(" ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆");
-                System.out.println(" ◆◆◆◆◆◆◆◆" + "  Ordenamientos Externos  " + "◆◆◆◆◆◆◆◆");
-                System.out.println("┃◆1.-Ordenamiento Polifase                ┃");
-                System.out.println("┃◆2.-Mezcla Equilibrada                   ┃");
-                System.out.println("┃◆3.-Radix Externo                        ┃");
-                System.out.println("┃◆4.-Salir                                ┃");
-                System.out.print("┃◆Opción: ");
-                
-                switch(sc.nextInt()){
+    /**
+     * Main method to handle user input and sorting operations.
+     * @param args command-line arguments
+     */
+    public static void main(String[] args) {
 
-                    case 1:
-                        sc.nextLine();
-                        System.out.print("Abriendo FileChooser...");
-                        launchFileChooser(); // Abrir FileChooser
-                        // Aquí puedes hacer algo con el archivo seleccionado
-                        if (selectedFile != null) {
-                            System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
-                            // Por ejemplo: Polifase pf = new Polifase(selectedFile.getAbsolutePath(), 10);
-                        } else {
-                            System.out.println("No se seleccionó ningún archivo.");
-                        }
-                        System.out.print("┃Tamaño de bloque: ");
-                        int m = sc.nextInt();
-                        Polifase pf = new Polifase(selectedFile, m);
-                        pf.ordenar();
-                        pf.mostrarDireccionArchivos();
-                        break;
-                    case 2:
-                        sc.nextLine();
-                        System.out.print("Abriendo FileChooser...");
-                        launchFileChooser(); // Abrir FileChooser
-                        // Aquí puedes hacer algo con el archivo seleccionado
-                        if (selectedFile != null) {
-                            System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
-                            // Por ejemplo: Polifase pf = new Polifase(selectedFile.getAbsolutePath(), 10);
-                        } else {
-                            System.out.println("No se seleccionó ningún archivo.");
-                        }
-                        MezclaEquilibrada me = new MezclaEquilibrada(selectedFile);
-                        me.ordenar();
-                        me.mostrarDireccionArchivos();
-                        break;
-                    case 3:
-                        sc.nextLine();
-                        System.out.print("Abriendo FileChooser...");
-                        launchFileChooser(); // Abrir FileChooser
-                        // Aquí puedes hacer algo con el archivo seleccionado
-                        if (selectedFile != null) {
-                            System.out.println("Archivo seleccionado: " + selectedFile.getAbsolutePath());
-                            // Por ejemplo: Polifase pf = new Polifase(selectedFile.getAbsolutePath(), 10);
-                        } else {
-                            System.out.println("No se seleccionó ningún archivo.");
-                        }
-                        RadixSortExterno rse = new RadixSortExterno(selectedFile);
+        try (Scanner scanner = new Scanner(System.in)) {
+            boolean continueLoop = true;
+            do {
+                try {
+                    System.out.println(" ◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆◆");
+                    System.out.println(" ◆◆◆◆◆◆◆◆" + " External Sorting Algorithms  " + "◆◆◆◆◆◆◆◆");
+                    System.out.println("┃◆1.-Polyphase Merge Sort                 ┃");
+                    System.out.println("┃◆2.-Balance Merge Sort                   ┃");
+                    System.out.println("┃◆3.-External Radix Sort                  ┃");
+                    System.out.println("┃◆4.-Exit program                         ┃");
+                    System.out.print("┃◆Option: ");
 
-                        System.out.print("┃Máximo número de digitos: ");
-                        rse.ordenar(sc.nextInt());
-                        rse.mostrarDireccionArchivos();
-                        break;
-                    case 4:
-                        continuar = false;
-                        break;
-                    default:
-                        System.out.println("\t◆◆◆◆OPCIÓN INVALIDA◆◆◆◆");
-                        break;
+                    switch (scanner.nextInt()) {
+
+                        case 1:
+                            scanner.nextLine();
+                            System.out.print("Opening FileChooser...");
+                            launchFileChooser(); // Open FileChooser
+                            // Here you can do something with the selected file
+                            if (selectedFile != null) {
+                                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                                // Example: Polyphase pf = new Polyphase(selectedFile.getAbsolutePath(), 10);
+                            } else {
+                                System.out.println("No file was selected.");
+                            }
+                            System.out.print("┃Polyphase block size: ");
+                            int m = scanner.nextInt();
+                            PolyphaseMergeSort pf = new PolyphaseMergeSort(selectedFile, m);
+                            pf.sort();
+                            pf.showFilesPath();
+                            break;
+                        case 2:
+                            scanner.nextLine();
+                            System.out.print("Opening FileChooser...");
+                            launchFileChooser(); // Open FileChooser
+                            // Here you can do something with the selected file
+                            if (selectedFile != null) {
+                                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                                // Example: BalanceMergeSort me = new BalanceMergeSort(selectedFile);
+                            } else {
+                                System.out.println("No file was selected.");
+                            }
+                            BalanceMergeSort me = new BalanceMergeSort(selectedFile);
+                            me.sort();
+                            me.showFilePaths();
+                            break;
+                        case 3:
+                            scanner.nextLine();
+                            System.out.print("Opening FileChooser...");
+                            launchFileChooser(); // Open FileChooser
+                            // Here you can do something with the selected file
+                            if (selectedFile != null) {
+                                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                            } else {
+                                System.out.println("No file was selected.");
+                            }
+                            ExternalRadixSort rse = new ExternalRadixSort(selectedFile);
+                            System.out.print("┃Max number of digits: ");
+                            rse.sort(scanner.nextInt());
+                            rse.showFilesPath();
+                            break;
+                        case 4:
+                            continueLoop = false;
+                            break;
+                        default:
+                            System.out.println("\t◆◆◆◆INVALID OPTION◆◆◆◆");
+                            break;
+                    }
+                } catch (FileNotFoundException ex) {
+                    System.out.println(">>>>>File not found");
+                } catch (IOException e) {
+                    System.out.println(">>>>>File error");
                 }
-            } catch (FileNotFoundException ex) {
-                System.out.println(">>>>>Archivo no encontrado");
-                
-            } catch (IOException e) {
-                System.out.println(">>d>>>Archivo no encontrado");
-            }
-
-    }while(continuar);
+            } while (continueLoop);
+        }
     }
 
-    // Método para lanzar JavaFX y abrir el FileChooser
+    // Method to launch JavaFX and open the FileChooser
     private static void launchFileChooser() {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
         fileChooser.setFileFilter(filter);
-    
-        // Crear el JDialog, sin necesidad de un JFrame
-        JDialog dialog = new JDialog((JDialog) null, "Seleccionar Archivo", true); // Modal y sin ventana padre
-        dialog.setAlwaysOnTop(true);  // Asegurar que esté siempre al frente
-        dialog.setLocationRelativeTo(null);  // Centrar en la pantalla
-    
-        // Añadir un listener para manejar la selección del archivo directamente en el JFileChooser
+
+        // Create JDialog without a JFrame
+        JDialog dialog = new JDialog((JDialog) null, "Select File", true); // Modal and no parent window
+        dialog.setAlwaysOnTop(true);  // Ensure it's always on top
+        dialog.setLocationRelativeTo(null);  // Center on the screen
+
+        // Add listener to handle file selection directly in JFileChooser
         fileChooser.addActionListener(e -> {
             if (JFileChooser.APPROVE_SELECTION.equals(e.getActionCommand())) {
-                // Obtener el archivo seleccionado
+                // Get the selected file
                 selectedFile = fileChooser.getSelectedFile();
-                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-                dialog.dispose(); // Cerrar el diálogo cuando se selecciona el archivo
+                dialog.dispose(); // Close the dialog when the file is selected
             } else if (JFileChooser.CANCEL_SELECTION.equals(e.getActionCommand())) {
-                System.out.println("Selección cancelada");
-                dialog.dispose(); // Cerrar el diálogo si se cancela la operación
+                System.out.println("Selection cancelled");
+                dialog.dispose(); // Close the dialog if the operation is canceled
             }
         });
-    
-        // Añadir el JFileChooser al JDialog
+
+        // Add JFileChooser to JDialog
         dialog.add(fileChooser);
         dialog.pack();
-        dialog.setVisible(true);  // Mostrar el diálogo
+        dialog.setVisible(true);  // Show the dialog
     }
-
-    /*Platform.startup(() -> {
-            try {
-                Stage stage = new Stage();
-                FileChooser fileChooser = new FileChooser();
-                fileChooser.setTitle("Selecciona el archivo a ordenar");
-                selectedFile = fileChooser.showOpenDialog(stage);
-            } catch (Exception e){
-                System.out.println(e.getMessage());
-            }
-            finally {
-                Platform.exit(); // Cerrar la plataforma de JavaFX una vez que se ha seleccionado el archivo
-            }
-        });*/
-
-/*
-    @Override
-    public void start(Stage primaryStage) {
-        // No se utiliza el primaryStage en este caso.
-    }*/
     
 }
    
