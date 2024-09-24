@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.Scanner;
 import java.io.File;
 
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -114,15 +115,32 @@ public class Principal  {
         JFileChooser fileChooser = new JFileChooser();
         FileNameExtensionFilter filter = new FileNameExtensionFilter("Text Files", "txt");
         fileChooser.setFileFilter(filter);
+    
+        // Crear el JDialog, sin necesidad de un JFrame
+        JDialog dialog = new JDialog((JDialog) null, "Seleccionar Archivo", true); // Modal y sin ventana padre
+        dialog.setAlwaysOnTop(true);  // Asegurar que esté siempre al frente
+        dialog.setLocationRelativeTo(null);  // Centrar en la pantalla
+    
+        // Añadir un listener para manejar la selección del archivo directamente en el JFileChooser
+        fileChooser.addActionListener(e -> {
+            if (JFileChooser.APPROVE_SELECTION.equals(e.getActionCommand())) {
+                // Obtener el archivo seleccionado
+                selectedFile = fileChooser.getSelectedFile();
+                System.out.println("Selected file: " + selectedFile.getAbsolutePath());
+                dialog.dispose(); // Cerrar el diálogo cuando se selecciona el archivo
+            } else if (JFileChooser.CANCEL_SELECTION.equals(e.getActionCommand())) {
+                System.out.println("Selección cancelada");
+                dialog.dispose(); // Cerrar el diálogo si se cancela la operación
+            }
+        });
+    
+        // Añadir el JFileChooser al JDialog
+        dialog.add(fileChooser);
+        dialog.pack();
+        dialog.setVisible(true);  // Mostrar el diálogo
+    }
 
-        int result = fileChooser.showSaveDialog(null);
-        if (result == JFileChooser.APPROVE_OPTION) {
-            selectedFile = fileChooser.getSelectedFile();
-            System.out.println("Selected file: " + selectedFile.getAbsolutePath());
-        } else {
-            System.out.println("No file selected.");
-        }
-        /*Platform.startup(() -> {
+    /*Platform.startup(() -> {
             try {
                 Stage stage = new Stage();
                 FileChooser fileChooser = new FileChooser();
@@ -135,7 +153,7 @@ public class Principal  {
                 Platform.exit(); // Cerrar la plataforma de JavaFX una vez que se ha seleccionado el archivo
             }
         });*/
-    }
+
 /*
     @Override
     public void start(Stage primaryStage) {
