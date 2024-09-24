@@ -38,7 +38,7 @@ build/
 .DS_Store
 
 ### Auxiliar Files ###
-MezclaEquilibrada/
-Polifase/
+BalanceMergeSort/
+Polyphase/
 Radix/
 
