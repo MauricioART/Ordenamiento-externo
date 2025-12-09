@@ -23,7 +23,7 @@ The project is designed to handle large files that cannot be sorted entirely in 
 
 1. Clone the repository to your local machine.
    ```bash
-   git clone https://github.com/your-username/external-sorting-algorithms.git
+   git clone https://github.com/MauricioART/External-Sorting-Algorithms.git
 
 2. Open the project in your preferred IDE (e.g., IntelliJ IDEA).
 
