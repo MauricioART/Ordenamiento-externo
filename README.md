@@ -25,19 +25,13 @@ The project is designed to handle large files that cannot be sorted entirely in 
    ```bash
    git clone https://github.com/MauricioART/External-Sorting-Algorithms.git
 
-2. Open the project in your preferred IDE (e.g., IntelliJ IDEA).
+2. **Build the project**
+   ```bash
+   mvn clean compile
 
-3. Compile the project and ensure all dependencies are resolved.
-
-4. Build the project:
-    ```bash
-    javac -d bin src/com/arturoar/tools/*.java
-
-## Usage
-
-After compiling the project, run the main class:
-    ```bash
- java -cp bin com.arturoar.tools.Principal
+3. **Run the application**
+   ```bash
+   mvn javafx:run
 
 Upon running, you'll be presented with a menu in the console with the following options:
 
